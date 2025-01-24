@@ -53,5 +53,18 @@ namespace InventoryAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = user.UserId }, user);
         }
 
+        //Busca usuario para logear
+        [HttpGet("login")]
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetByCredentials(string userName, long userPhone)
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.UserNames == userName && u.UserPhone == userPhone);
+
+            return user == null ? NotFound() : Ok(user);
+        }
+
+
     }
 }
